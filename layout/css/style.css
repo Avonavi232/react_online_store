@@ -5,6 +5,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 body {
   min-width: 1205px;
   margin: 0 auto;

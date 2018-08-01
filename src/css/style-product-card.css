@@ -81,12 +81,14 @@ h2.section-name {
   width: 500px;
   height: 440px;
   margin: 45px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .main-screen__favourite-product-pic img {
-  position: relative;
-  top: 23px;
-  left: 14px;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .main-screen__favourite-product-pic img:hover {
@@ -142,6 +144,11 @@ a.main-screen__favourite-product-pic__zoom{
   text-align: center;
   border-radius: 2px;
   color: #A1B3BF;
+}
+
+.not-in-stock {
+  border: 1px solid #bf9fa3;
+  color: #bf9fa3;
 }
 
 
@@ -383,120 +390,22 @@ li.not-available:after{
 
 /*Слайдеры*/
 
-/*Слайдер выбранного товара*/
-.main-screen__favourite-product-slider {
-  height: 500px;
-}
-
-.favourite-product-slider {
-  position: relative;
-  top: 27px;
-  left: 2px;
-  width: 142px;
-  height: 440px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.arrow-up,
-.arrow-down {
-  position: absolute;
-  height: 30px;
-  width: 30px;
-  background-image: url(../img/product-card-pics/drop-down-up-chevron-sprite.png);
-  background-repeat: no-repeat;
-}
-
-.favourite-product-slider__arrow {
-  right: 57px;
-}
-
-.favourite-product-slider__arrow:hover {
-  cursor: pointer;
-  outline: solid 1px #cccccc;
-}
-
-.favourite-product-slider__arrow_up {
-  background-position: -65px 8px;
-  top: -32px;
-}
-
-.favourite-product-slider__arrow_down {
-  background-position: -5px 9px;
-  bottom: -32px;
-}
-
-.favourite-product-slider__item {
-  width: 142px;
-  height: 128px;
-  border: 1px solid #C4C4C4;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.favourite-product-slider__item:hover {
-  opacity: 0.6;
-}
-
-.favourite-product-slider__item a {
-  display: inline-block;
-  height: 100%;
-  width: 100%;
-}
-
-.favourite-product-slider__item-1 {
-  background: url(../img/product-card-pics/product-card__favourite-product-slider-item-1.png) no-repeat;
-  background-position: 29px 0;
-}
-
-.favourite-product-slider__item-2 {
-  background: url(../img/product-card-pics/product-card__favourite-product-slider-item-2.png) no-repeat;
-  background-position: 13px 0;
-}
-
-.favourite-product-slider__item-3 {
-  background: url(../img/product-card-pics/product-card__favourite-product-slider-item-3.png) no-repeat;
-  background-position: 30px 0;
-}
-
-
 /*Слайдер "Вы смотрели"*/
-.product-card__overlooked-slider {
-  width: 995px;
-  margin: 55px auto;
-}
 
 .product-card__overlooked-slider h3 {
-  position: relative;
-  top: 21px;
   font-family: Roboto;
   font-weight: 700;
   font-size: 20px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.product-card__overlooked-slider{
+  margin: 50px auto;
 }
 
 .overlooked-slider {
-  position: relative;
-  top: 22px;
-  right: -1px;
-  width: 995px;
-  height: 180px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.overlooked-slider__arrow_left {
-  background-position: -60px 0;
-  left: -45px;
-}
-
-.overlooked-slider__arrow_right {
-  background-position: -90px 0;
-  right: -45px;
+  justify-content: center;
 }
 
 .overlooked-slider__item {
@@ -519,84 +428,27 @@ li.not-available:after{
   width: 100%;
 }
 
-.overlooked-slider__item-1 {
-  background-image: url(../img/catalogue-pics/product-catalogue__overlooked-slider-item-1.png);
-}
-
-.overlooked-slider__item-2 {
-  background-image: url(../img/catalogue-pics/product-catalogue__overlooked-slider-item-2.png);
-}
-
-.overlooked-slider__item-3 {
-  background-image: url(../img/catalogue-pics/product-catalogue__overlooked-slider-item-3.png);
-}
-
-.overlooked-slider__item-4 {
-  background-image: url(../img/catalogue-pics/product-catalogue__overlooked-slider-item-4.png);
-}
-
-.overlooked-slider__item-5 {
-  background-image: url(../img/catalogue-pics/product-catalogue__overlooked-slider-item-5.png);
-}
-
 
 /*Слайдер "Похожие товары"*/
 .product-card__similar-products-slider {
-  width: 995px;
-  margin: 50px auto 73px;
+  margin: 50px auto;
 }
 
+
 .product-card__similar-products-slider h3 {
-  position: relative;
-  top: 24px;
   font-family: Roboto;
   font-weight: 700;
   font-size: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.similar-products-slider {
-  position: relative;
-  top: 23px;
-  right: -1px;
-  width: 995px;
-  height: 367px;
+.similar-products-slider{
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 auto;
-}
-
-.arrow {
-  position: absolute;
-  height: 30px;
-  width: 30px;
-  background-image: url(../img/slider_sprite.png);
-  background-repeat: no-repeat;
-}
-
-.arrow:hover {
-  cursor: pointer;
-  outline: solid 1px #cccccc;
-}
-
-.similar-products-slider__arrow {
-  position: absolute;
-  top: 130px;
-}
-
-.similar-products-slider__arrow_left {
-  background-position: -60px 0;
-  left: -45px;
-}
-
-.similar-products-slider__arrow_right {
-  background-position: -90px 0;
-  right: -45px;
+  justify-content: center;
 }
 
 .similar-products-slider__item {
-  position: relative;
-  top: -3px;
   width: 319px;
   height: 230px;
   border: solid 0.5px rgba(41, 42, 58, 0.25);
@@ -610,41 +462,10 @@ li.not-available:after{
   opacity: 0.6;
 }
 
-.similar-products-slider__item a {
-  display: inline-block;
-  height: 100%;
-  width: 100%;
-}
-
 .similar-products-slider__item-list__item-card {
   width: 319px;
-  height: auto;
 }
 
-.similar-products-slider__item-pic-1 {
-  position: relative;
-  top: 6px;
-  left: 40px;
-}
-
-.similar-products-slider__item-pic-2 {
-  position: relative;
-  top: 21px;
-  left: 16px;
-}
-
-.similar-products-slider__item-pic-3 {
-  position: relative;
-  top: 7px;
-  left: 24px;
-}
-
-.similar-products-slider__item-desc {
-  position: relative;
-  top: -4px;
-  left: 3px;
-  width: 317px;
-}
 
 .similar-products-slider__item-name {
   font-family: 'Roboto', sans-serif;
@@ -683,6 +504,20 @@ span.producer {
   font-weight: 700;
   font-size: 20px;
   text-align: center;
+}
+
+
+.similar-products-slider__img-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.similar-products-slider__img-container img {
+  max-height: calc(100% - 1px);
+  max-width: calc(100% - 1px);
 }
 
 /*Кастомизация бегунков*/

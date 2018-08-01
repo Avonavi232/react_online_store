@@ -1,5 +1,10 @@
 import React from 'react';
 
+const Toggler = props => {
+
+};
+
+
 export default class CatalogueSidebar extends React.Component {
 	render() {
 		return (
@@ -23,7 +28,7 @@ export default class CatalogueSidebar extends React.Component {
 							</ul>
 						</div>
 					</section>
-					<div className="separator-150 separator-150-1"/>
+
 					<section className="sidebar__division">
 						<div className="sidebar__price">
 							<div className="sidebar__division-title">
@@ -45,7 +50,7 @@ export default class CatalogueSidebar extends React.Component {
 							</div>
 						</div>
 					</section>
-					<div className="separator-150 separator-150-2"/>
+
 					<section className="sidebar__division">
 						<div className="sidebar__color">
 							<div className="sidebar__division-title">
@@ -77,7 +82,7 @@ export default class CatalogueSidebar extends React.Component {
 							</ul>
 						</div>
 					</section>
-					<div className="separator-150 separator-150-3"/>
+
 					<section className="sidebar__division">
 						<div className="sidebar__size">
 							<div className="sidebar__division-title">
@@ -161,7 +166,7 @@ export default class CatalogueSidebar extends React.Component {
 							</ul>
 						</div>
 					</section>
-					<div className="separator-150 separator-150-4"/>
+
 					<section className="sidebar__division">
 						<div className="sidebar__heel-height">
 							<div className="sidebar__division-title">
@@ -170,7 +175,7 @@ export default class CatalogueSidebar extends React.Component {
 							</div>
 						</div>
 					</section>
-					<div className="separator-150 separator-150-5"/>
+
 					<section className="sidebar__division">
 						<div className="sidebar__occasion">
 							<div className="sidebar__division-title">
@@ -189,7 +194,7 @@ export default class CatalogueSidebar extends React.Component {
 							</ul>
 						</div>
 					</section>
-					<div className="separator-150 separator-150-6"/>
+
 					<section className="sidebar__division">
 						<div className="sidebar__season">
 							<div className="sidebar__division-title">
@@ -198,7 +203,7 @@ export default class CatalogueSidebar extends React.Component {
 							</div>
 						</div>
 					</section>
-					<div className="separator-150 separator-150-7"/>
+
 					<section className="sidebar__division">
 						<div className="sidebar__brand">
 							<h3>Бренд</h3>

@@ -45,6 +45,14 @@ li a:hover {
   text-transform: uppercase;
   color: #333333;
 }
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
 .arrow {
   position: absolute;
   height: 30px;

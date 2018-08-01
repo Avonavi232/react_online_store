@@ -11,7 +11,7 @@ export default class CataloguePage extends React.Component{
 		return(
 				<React.Fragment>
 					<Breadcrumbs/>
-					<main className="product-catalogue">
+					<main className="product-catalogue clearfix">
 						<CatalogueSidebar/>
 						<CatalogueFeed/>
 					</main>

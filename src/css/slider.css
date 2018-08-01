@@ -1,0 +1,118 @@
+.favourite-product-slider {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slider-arrow-next,
+.slider-arrow-prev {
+    /*position: absolute;*/
+    height: 30px;
+    width: 30px;
+    background-image: url(../img/product-card-pics/drop-down-up-chevron-sprite.png);
+    background-repeat: no-repeat;
+}
+
+.slider-arrow-next:hover,
+.slider-arrow-prev:hover {
+    cursor: pointer;
+}
+
+.slider-arrow-next {
+    background-position: -5px 10px;
+}
+
+.slider-arrow-prev {
+    background-position: -65px 10px;
+}
+
+/*.favourite-product-slider__arrow {*/
+    /*right: 57px;*/
+/*}*/
+
+/*.favourite-product-slider__arrow:hover {*/
+    /*cursor: pointer;*/
+    /*outline: solid 1px #cccccc;*/
+/*}*/
+
+/*.favourite-product-slider__arrow_up {*/
+    /*background-position: -65px 8px;*/
+    /*top: -32px;*/
+/*}*/
+
+/*.favourite-product-slider__arrow_down {*/
+    /*background-position: -5px 9px;*/
+    /*bottom: -32px;*/
+/*}*/
+
+.favourite-product-slider__item {
+    width: 142px;
+    height: 128px;
+    border: 1px solid #C4C4C4;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.favourite-product-slider__item:hover {
+    opacity: 0.6;
+}
+
+.favourite-product-slider__item a {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
+
+
+/*.favourite-product-slider__item {*/
+    /*background-size: contain;*/
+    /*background: no-repeat center;*/
+/*}*/
+
+
+.slider-list {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.slider-track{
+    transition: transform .3s;
+}
+
+.slider-item{
+    box-sizing: border-box;
+}
+
+.slider.slider-horizontal{
+    display: flex;
+    align-items: center;
+}
+
+.slider.slider-horizontal .slider-track {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.slider.slider-horizontal .slider-item {
+    display: inline-block;
+}
+
+.slider.slider-horizontal .slider-arrow-prev {
+    transform: rotate(-90deg);
+}
+
+.slider.slider-horizontal .slider-arrow-next {
+    transform: rotate(-90deg);
+}
+
+.slider-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
