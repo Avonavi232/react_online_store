@@ -12,81 +12,103 @@ import HomePage from './components/pages/HomePage';
 import CataloguePage from './components/pages/CataloguePage';
 import ProductPage from './components/pages/ProductPage';
 
+import {get} from "./utils/functions";
+
 
 class App extends Component {
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
 
-        this.api = 'https://neto-api.herokuapp.com/bosa-noga';
-        this.overlookedStorageKey = 'bosanogaOverlooked';
+		this.api = 'https://neto-api.herokuapp.com/bosa-noga';
+		this.overlookedStorageKey = 'bosanogaOverlooked';
+		this.favoriteStorageKey = 'bosanogaFavorite';
 
-        this.state = {
-            fetching: false,
-            categories: []
-        };
-    }
+		this.state = {
+			fetching: false,
+			categories: []
+		};
+	}
 
-    componentDidMount() {
-        //Fetch categories
-        this.setState({fetching: true}, () => {
-            fetch(`${this.api}/categories`)
-                .then(res => {
-                    this.setState({fetching: false});
+	componentDidMount() {
+		//Fetch categories
+		this.setState({fetching: true}, () => {
+			get(`${this.api}/categories`)
+					.then(({data}) => {
+						this.setState({
+							fetching: false,
+							categories: data
+						})
+					})
+		});
+	}
 
-                    if (res.status >= 200 && res.status < 300) {
-                        const body = res.json();
-                        if (body.status = 'ok') {
-                            return body;
-                        } else {
-                            throw new Error(`Category fetch error. Status: ${res.status}. Body status: ${body.status}`);
-                        }
-                    } else {
-                        throw new Error(`Category fetch error. Status: ${res.status}`);
-                    }
-                })
-                .then(({data}) => {
-                    this.setState({
-                        categories: data
-                    })
-                })
-        });
-    }
+	getChildContext() {
+		return {
+			api: this.api,
+			overlookedStorageKey: this.overlookedStorageKey,
+			favoriteStorageKey: this.favoriteStorageKey
+	}
+	}
 
-    getChildContext() {
-        return {
-            api: this.api,
-            overlookedStorageKey: this.overlookedStorageKey
-        }
-    }
+	addToFavorite = (favoriteID, currentStorage) => {
+		get(`${this.api}/products/${favoriteID}`)
+				.then(({data}) => {
+					currentStorage.push(data);
+					localStorage.setItem(this.favoriteStorageKey, JSON.stringify(currentStorage));
+				})
+	};
 
-    render() {
-        const {fetching, categories} = this.state;
-        return (
-            <div className="app container">
-                <Header fetching={fetching} categories={categories}/>
+	removeFromFavorite = (favoriteID, currentStorage) => {
+		const newStorage = currentStorage.filter(el => el.id !== favoriteID);
+		localStorage.setItem(this.favoriteStorageKey, JSON.stringify(newStorage));
+	};
 
-                <Switch>
-                    <Route exact path="/" render={props =>
-                        <HomePage
-                            fetching={fetching}
-                            categories={categories}
-                            {...props}
-                        />
-                    }
-                    />
-                    <Route path="/products" component={CataloguePage}/>
-                    <Route path="/product" component={ProductPage}/>
-                </Switch>
+	handleFavoriteToggle = event => {
+		const
+				favoriteID = Number(event.currentTarget.dataset.id),
+				storageStr = localStorage.getItem(this.favoriteStorageKey),
+				storageParsed = storageStr ? JSON.parse(storageStr) : [];
 
-                <Footer/>
-            </div>
-        );
-    }
+		if (storageParsed.find(el => el.id === favoriteID)) {
+			this.removeFromFavorite(favoriteID, storageParsed);
+			// event.currentTarget.classList.remove('favorite');
+		} else {
+			this.addToFavorite(favoriteID, storageParsed);
+			// event.currentTarget.classList.add('favorite');
+		}
+
+	};
+
+	render() {
+		const {fetching, categories} = this.state;
+		return (
+				<div className="app container">
+					<Header fetching={fetching} categories={categories}/>
+
+					<Switch>
+						<Route exact path="/" render={props =>
+								<HomePage
+										fetching={fetching}
+										categories={categories}
+										handleFavoriteToggle={this.handleFavoriteToggle}
+										{...props}
+								/>
+						}
+						/>
+						<Route path="/products" component={CataloguePage}/>
+						<Route path="/product" component={ProductPage}/>
+					</Switch>
+
+					<Footer/>
+				</div>
+		);
+	}
 }
 
 App.childContextTypes = {
-    api: PropTypes.string.isRequired,
-    overlookedStorageKey: PropTypes.string.isRequired
+	api: PropTypes.string.isRequired,
+	overlookedStorageKey: PropTypes.string.isRequired,
+	favoriteStorageKey : PropTypes.string.isRequired,
 };
 
 export default App;

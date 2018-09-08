@@ -1,10 +1,10 @@
 import React from 'react';
 
 const ListItem = props =>
-		<li onClick={props.onClick}
+		<li
 				className={`new-deals__menu-item ${props.active ? 'new-deals__menu-item_active' : undefined}`}>
 			<a
-					onClick={e => e.preventDefault()}
+					onClick={props.onClick}
 					data-id={props.catId}
 					href="/"
 			>

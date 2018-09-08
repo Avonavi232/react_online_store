@@ -10,10 +10,6 @@ import Breadcrumbs from '../Breadcrumbs';
 import ProductPics from '../ProductPics';
 import Slider from '../Slider';
 
-import img1 from '../../img/product-card-pics/product-card__similar-products-slider-item-1.png';
-import img2 from '../../img/product-card-pics/product-card__similar-products-slider-item-2.png';
-import img3 from '../../img/product-card-pics/product-card__similar-products-slider-item-3.png';
-
 const overlookedSliderSettings = {
     direction: 'horizontal',
     equalWidth: true,
