@@ -19,7 +19,14 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.api = 'https://neto-api.herokuapp.com/bosa-noga';
+		this.api = 'https://api-neto.herokuapp.com/bosa-noga';
+		this.baseurl = 'https://api-neto.herokuapp.com/bosa-noga';
+
+		this.newApi = {
+			filters: () => `${this.baseurl}/filters`,
+			products: queryStr => `${this.baseurl}/products${queryStr ? `/?${queryStr}` : ''}`
+		};
+
 		this.overlookedStorageKey = 'bosanogaOverlooked';
 		this.favoriteStorageKey = 'bosanogaFavorite';
 
@@ -45,9 +52,10 @@ class App extends Component {
 	getChildContext() {
 		return {
 			api: this.api,
+			newApi: this.newApi,
 			overlookedStorageKey: this.overlookedStorageKey,
 			favoriteStorageKey: this.favoriteStorageKey
-	}
+		}
 	}
 
 	addToFavorite = (favoriteID, currentStorage) => {
@@ -95,7 +103,15 @@ class App extends Component {
 								/>
 						}
 						/>
-						<Route path="/products" component={CataloguePage}/>
+						<Route
+								path="/products"
+								render={
+									props =>
+											categories.length ?
+													<CataloguePage {...props} categories={categories}/> :
+													<p>Loading</p>
+								}
+						/>
 						<Route path="/product" component={ProductPage}/>
 					</Switch>
 
@@ -107,8 +123,9 @@ class App extends Component {
 
 App.childContextTypes = {
 	api: PropTypes.string.isRequired,
+	newApi: PropTypes.object.isRequired,
 	overlookedStorageKey: PropTypes.string.isRequired,
-	favoriteStorageKey : PropTypes.string.isRequired,
+	favoriteStorageKey: PropTypes.string.isRequired,
 };
 
 export default App;

@@ -1,12 +1,17 @@
 import React from 'react';
+import PropsTypes from 'prop-types';
+import {NavLink} from 'react-router-dom';
+import Pagination from './Pagination'
 
-export default class CatalogueSidebar extends React.Component {
+class CatalogueFeed extends React.Component {
+
 	render() {
+		const {feed, goods, pages, page, categoryName, onSelectPage} = this.props;
 		return (
 				<section className="product-catalogue-content">
 					<section className="product-catalogue__head">
 						<div className="product-catalogue__section-title">
-							<h2 className="section-name">Женская обувь</h2><span className="amount"> 1 764 товара</span>
+							<h2 className="section-name">{categoryName}</h2><span className="amount">Найдено товаров: {goods}</span>
 						</div>
 						<div className="product-catalogue__sort-by">
 							<p className="sort-by">Сортировать</p>
@@ -20,185 +25,62 @@ export default class CatalogueSidebar extends React.Component {
 
 					<section className="product-catalogue__item-list">
 
-						<a className="item-list__item-card item" href="product-card-desktop.html">
-							<div className="item-pic">
-								<img
-										className="item-pic-1"
-										src="img/catalogue-pics/product-catalogue__item-1.png"
-										alt="Босоножки женские"
-								/>
-								<div className="product-catalogue__product_favorite">
-									<p></p>
-								</div>
-								<div className="arrow arrow_left"/>
-								<div className="arrow arrow_right"/>
-							</div>
-							<div className="item-desc">
-								<h4 className="item-name">Босоножки женские</h4>
-								<p className="item-producer">Производитель: <span className="producer">Damlax</span></p>
-								<p className="item-price">18 520</p>
-								<div className="sizes">
-									<p className="sizes__title">Размеры в наличии:</p>
-									<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
-								</div>
-							</div>
-						</a>
-						<a className="item-list__item-card item" href="product-card-desktop.html">
-							<div className="item-pic">
-								<img
-										className="item-pic-1"
-										src="img/catalogue-pics/product-catalogue__item-1.png"
-										alt="Босоножки женские"
-								/>
-								<div className="product-catalogue__product_favorite">
-									<p></p>
-								</div>
-								<div className="arrow arrow_left"/>
-								<div className="arrow arrow_right"/>
-							</div>
-							<div className="item-desc">
-								<h4 className="item-name">Босоножки женские</h4>
-								<p className="item-producer">Производитель: <span className="producer">Damlax</span></p>
-								<p className="item-price">18 520</p>
-								<div className="sizes">
-									<p className="sizes__title">Размеры в наличии:</p>
-									<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
-								</div>
-							</div>
-						</a>
-						<a className="item-list__item-card item" href="product-card-desktop.html">
-							<div className="item-pic">
-								<img
-										className="item-pic-1"
-										src="img/catalogue-pics/product-catalogue__item-1.png"
-										alt="Босоножки женские"
-								/>
-								<div className="product-catalogue__product_favorite">
-									<p></p>
-								</div>
-								<div className="arrow arrow_left"/>
-								<div className="arrow arrow_right"/>
-							</div>
-							<div className="item-desc">
-								<h4 className="item-name">Босоножки женские</h4>
-								<p className="item-producer">Производитель: <span className="producer">Damlax</span></p>
-								<p className="item-price">18 520</p>
-								<div className="sizes">
-									<p className="sizes__title">Размеры в наличии:</p>
-									<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
-								</div>
-							</div>
-						</a>
-						<a className="item-list__item-card item" href="product-card-desktop.html">
-							<div className="item-pic">
-								<img
-										className="item-pic-1"
-										src="img/catalogue-pics/product-catalogue__item-1.png"
-										alt="Босоножки женские"
-								/>
-								<div className="product-catalogue__product_favorite">
-									<p></p>
-								</div>
-								<div className="arrow arrow_left"/>
-								<div className="arrow arrow_right"/>
-							</div>
-							<div className="item-desc">
-								<h4 className="item-name">Босоножки женские</h4>
-								<p className="item-producer">Производитель: <span className="producer">Damlax</span></p>
-								<p className="item-price">18 520</p>
-								<div className="sizes">
-									<p className="sizes__title">Размеры в наличии:</p>
-									<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
-								</div>
-							</div>
-						</a>
-						<a className="item-list__item-card item" href="product-card-desktop.html">
-							<div className="item-pic">
-								<img
-										className="item-pic-1"
-										src="img/catalogue-pics/product-catalogue__item-1.png"
-										alt="Босоножки женские"
-								/>
-								<div className="product-catalogue__product_favorite">
-									<p></p>
-								</div>
-								<div className="arrow arrow_left"/>
-								<div className="arrow arrow_right"/>
-							</div>
-							<div className="item-desc">
-								<h4 className="item-name">Босоножки женские</h4>
-								<p className="item-producer">Производитель: <span className="producer">Damlax</span></p>
-								<p className="item-price">18 520</p>
-								<div className="sizes">
-									<p className="sizes__title">Размеры в наличии:</p>
-									<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
-								</div>
-							</div>
-						</a>
-						<a className="item-list__item-card item" href="product-card-desktop.html">
-							<div className="item-pic">
-								<img
-										className="item-pic-1"
-										src="img/catalogue-pics/product-catalogue__item-1.png"
-										alt="Босоножки женские"
-								/>
-								<div className="product-catalogue__product_favorite">
-									<p></p>
-								</div>
-								<div className="arrow arrow_left"/>
-								<div className="arrow arrow_right"/>
-							</div>
-							<div className="item-desc">
-								<h4 className="item-name">Босоножки женские</h4>
-								<p className="item-producer">Производитель: <span className="producer">Damlax</span></p>
-								<p className="item-price">18 520</p>
-								<div className="sizes">
-									<p className="sizes__title">Размеры в наличии:</p>
-									<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
-								</div>
-							</div>
-						</a>
-						<a className="item-list__item-card item" href="product-card-desktop.html">
-							<div className="item-pic">
-								<img
-										className="item-pic-1"
-										src="img/catalogue-pics/product-catalogue__item-1.png"
-										alt="Босоножки женские"
-								/>
-								<div className="product-catalogue__product_favorite">
-									<p></p>
-								</div>
-								<div className="arrow arrow_left"/>
-								<div className="arrow arrow_right"/>
-							</div>
-							<div className="item-desc">
-								<h4 className="item-name">Босоножки женские</h4>
-								<p className="item-producer">Производитель: <span className="producer">Damlax</span></p>
-								<p className="item-price">18 520</p>
-								<div className="sizes">
-									<p className="sizes__title">Размеры в наличии:</p>
-									<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>
-								</div>
-							</div>
-						</a>
+						{
+							feed.map(item => {
+								return (
+										<NavLink key={item.id} className="item-list__item-card item" to={`/product/?id=${item.id}`}>
+											<div className="item-pic">
+												<img
+														src={item.images[0]}
+														alt={item.title}
+												/>
+												<div className="product-catalogue__product_favorite">
+													<p></p>
+												</div>
+												{/*<div className="arrow arrow_left"/>*/}
+												{/*<div className="arrow arrow_right"/>*/}
+											</div>
+											<div className="item-desc">
+												<h4 className="item-name">{item.title}</h4>
+												<p className="item-producer">Производитель: <span className="producer">{item.brand}</span></p>
+												<p className="item-price">{item.price}</p>
+												{/*<div className="sizes">*/}
+												{/*<p className="sizes__title">Размеры в наличии:</p>*/}
+												{/*<p className="sizes__avalible">36, 37, 38, 39, 40, 41, 42</p>*/}
+												{/*</div>*/}
+											</div>
+										</NavLink>
+								)
+							})
+						}
 					</section>
 
-					<div className="product-catalogue__pagination">
-						<div className="page-nav-wrapper">
-							{/*<div className="angle-back"><a href="/"/></div>*/}
-							<ul>
-								<li className="active"><a href="/">1</a></li>
-								<li><a href="/">2</a></li>
-								<li><a href="/">3</a></li>
-								<li><a href="/">4</a></li>
-								<li><a href="/">5</a></li>
-								<li><a href="/">...</a></li>
-								<li><a href="/">99</a></li>
-							</ul>
-							{/*<div className="angle-forward"><a href="/"/></div>*/}
-						</div>
-					</div>
+					{
+						pages > 1 ?
+								<Pagination onSelectPage={onSelectPage} page={page} pages={pages}/> :
+								undefined
+					}
 				</section>
 		)
 	}
 }
+
+CatalogueFeed.propTypes = {
+	categoryName: PropsTypes.string.isRequired,
+	feed: PropsTypes.array.isRequired,
+	goods: PropsTypes.oneOfType([
+		PropsTypes.number,
+		PropsTypes.string
+	]).isRequired,
+	pages: PropsTypes.oneOfType([
+		PropsTypes.number,
+		PropsTypes.string
+	]).isRequired,
+	page: PropsTypes.oneOfType([
+		PropsTypes.number,
+		PropsTypes.string
+	]).isRequired,
+	onSelectPage: PropsTypes.func.isRequired
+};
+
+export default CatalogueFeed;
