@@ -11,166 +11,216 @@ import {get, serialize, transliterate} from "../../utils/functions";
 import '../../css/style-catalogue.css';
 
 class CataloguePage extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+    constructor(props, context) {
+        super(props, context);
 
-		const categoryId = parse(this.props.location.search).category;
+        const categoryId = parse(this.props.location.search).category;
 
-		this.state = {
-			categoryName: this.props.categories.find(el => el.id === Number(categoryId)).title,
-			feed: undefined,
-			pages: undefined,
-			goods: undefined,
-			feedUpdated: true,
-			filters: {
-				page: 1,
-				categoryId,
-				maxPrice: undefined,
-				minPrice: undefined,
-				type: undefined,
-				color: undefined
-			},
-			availableFilters: undefined
-		}
-	}
+        this.state = {
+            categoryName: this.props.categories.find(el => el.id === Number(categoryId)).title,
+            feed: undefined,
+            pages: undefined,
+            goods: undefined,
+            feedUpdated: true,
+            filters: {
+                page: 1,
+                categoryId,
+                ...this.handleResetFilters()
+            },
+            availableFilters: undefined
+        }
+    }
 
-	componentDidMount() {
-		const filters = serialize(this.state.filters);
+    componentDidMount() {
+        const filters = serialize(this.state.filters);
 
-		Promise.all([
-			this.getFilteredProducts(filters),
-			this.getAllFilterValues()
-		])
-				.then(responce => {
-					this.setState({
-						pages: responce[0].pages,
-						goods: responce[0].goods,
-						feed: responce[0].data,
-						availableFilters: responce[1]
-					})
-				});
-	}
+        Promise.all([
+            this.getFilteredProducts(filters),
+            this.getAllFilterValues()
+        ])
+            .then(responce => {
+                this.setState({
+                    pages: responce[0].pages,
+                    goods: responce[0].goods,
+                    feed: responce[0].data,
+                    availableFilters: responce[1],
+                    filters: {
+                        ...this.state.filters,
+                        sortBy: responce[1].sortBy[0].value
+                    }
+                })
+            });
+    }
 
-	componentDidUpdate(prevProps) {
-		const
-				filters = serialize(this.state.filters),
-				categoryId = parse(this.props.location.search).category,
-				prevCategoryId = parse(prevProps.location.search).category,
-				categoryName = this.props.categories.find(el => el.id === Number(categoryId)).title;
+    componentDidUpdate(prevProps) {
+        const
+            filters = serialize(this.state.filters),
+            categoryId = parse(this.props.location.search).category,
+            prevCategoryId = parse(prevProps.location.search).category,
+            categoryName = this.props.categories.find(el => el.id === Number(categoryId)).title;
 
-		if (categoryId !== prevCategoryId) {
-			this.setState({
-				feedUpdated: false,
-				categoryName,
-				filters: {
-					page: 1,
-					categoryId,
-					maxPrice: undefined,
-					minPrice: undefined,
-					type: undefined,
-					color: undefined
-				}
-			})
-		}
+        if (categoryId !== prevCategoryId) {
+            this.setState({
+                feedUpdated: false,
+                categoryName,
+                filters: {
+                    page: 1,
+                    categoryId,
+                    ...this.handleResetFilters()
+                }
+            })
+        }
 
-		if (!this.state.feedUpdated) {
-			this.getFilteredProducts(filters)
-					.then(responce => {
-						this.setState({
-							feedUpdated: true,
-							pages: responce.pages,
-							goods: responce.goods,
-							feed: responce.data
-						})
-					});
-		}
-	}
+        if (!this.state.feedUpdated) {
+            this.getFilteredProducts(filters)
+                .then(responce => {
+                    this.setState({
+                        feedUpdated: true,
+                        pages: responce.pages,
+                        goods: responce.goods,
+                        feed: responce.data
+                    })
+                });
+        }
+    }
 
-	handleUpdatePriceFilter = (minPrice, maxPrice) => {
-		this.setState({
-			feedUpdated: false,
-			filters: {
-				...this.state.filters,
-				maxPrice,
-				minPrice
-			}
-		});
-	};
+    handleResetFilters = (setState) => {
+        const reset = {
+            maxPrice: undefined,
+            minPrice: undefined,
+            type: undefined,
+            color: undefined,
+            sortBy: undefined,
+            size: [],
+            heelSize: [],
+            brand: undefined,
+            season: undefined,
+            reason: undefined,
+            search: undefined
+        };
 
-	handleSelectPage = (page) => {
-		this.setState({
-			feedUpdated: false,
-			filters: {
-				...this.state.filters,
-				page
-			}
-		});
-	};
+        if (setState) {
+            this.setState({
+                feedUpdated: false,
+                filters: {
+                    ...this.state.filters,
+                    ...reset
+                }
+            });
+        } else {
+            return reset;
+        }
+    }
 
-	handleSelectFilter = filterObject => {
-		this.setState({
-			feedUpdated: false,
-			filters: {
-				...this.state.filters,
-				...filterObject
-			}
-		});
-	};
+    handleUpdatePriceFilter = (minPrice, maxPrice) => {
+        this.setState({
+            feedUpdated: false,
+            filters: {
+                ...this.state.filters,
+                maxPrice,
+                minPrice
+            }
+        });
+    };
 
-	getAllFilterValues = () => {
-		const {filters} = this.context.newApi;
+    handleSelectPage = (page) => {
+        this.setState({
+            feedUpdated: false,
+            filters: {
+                ...this.state.filters,
+                page
+            }
+        });
+    };
 
-		return new Promise(resolve => {
-			get(filters())
-					.then(({data: filters}) => resolve(filters));
-		});
-	};
+    handleSelectFilter = filterObject => {
+        this.setState({
+            feedUpdated: false,
+            filters: {
+                ...this.state.filters,
+                ...filterObject
+            }
+        });
+    };
 
-	getFilteredProducts = filters => {
-		const {products} = this.context.newApi;
+    getAllFilterValues = () => {
+        const {filters} = this.context.newApi;
 
-		return new Promise(resolve => {
-			get(products(filters))
-					.then(responce => resolve(responce));
-		})
-	};
+        return new Promise(resolve => {
+            get(filters())
+                .then(({data: filters}) => {
+                    filters.sortBy = [
+                        {
+                            value: 'popularity',
+                            title: 'По популярности'
+                        },
+                        {
+                            value: 'size',
+                            title: 'По размеру'
+                        },
+                        {
+                            value: 'brand',
+                            title: 'По производителю'
+                        },
+                        {
+                            value: 'price',
+                            title: 'По цене'
+                        }
+                    ];
+                    resolve(filters);
+                });
+        });
+    };
 
-	render() {
-		const {feed, goods, pages, categoryName, availableFilters} = this.state;
-		return (
-				<React.Fragment>
-					<Breadcrumbs/>
-					<main className="product-catalogue clearfix">
-						{
-							availableFilters ?
-									<CatalogueSidebar
-											onSelectFilter={this.handleSelectFilter}
-											availableFilters={availableFilters}
-											onChangePriceFilter={this.handleUpdatePriceFilter}
-									/> :
-									undefined
-						}
-						{
-							pages && goods && feed ?
-									<CatalogueFeed
-											feed={feed}
-											goods={goods}
-											pages={pages}
-											page={this.state.filters.page}
-											categoryName={categoryName}
-											onSelectPage={this.handleSelectPage}
-									/> :
-									undefined
-						}
-					</main>
-					{/*<CatalogueSlider/>*/}
-				</React.Fragment>
-		)
-	}
+    getFilteredProducts = filters => {
+        const {products} = this.context.newApi;
+
+        return new Promise(resolve => {
+            get(products(filters))
+                .then(responce => resolve(responce));
+        })
+    };
+
+    render() {
+        const {feed, goods, pages, categoryName, availableFilters, filters} = this.state;
+        return (
+            <React.Fragment>
+                <Breadcrumbs/>
+                <main className="product-catalogue clearfix">
+                    {
+                        availableFilters ?
+                            <CatalogueSidebar
+                                onSelectFilter={this.handleSelectFilter}
+                                availableFilters={availableFilters}
+                                onChangePriceFilter={this.handleUpdatePriceFilter}
+                                filters={filters}
+                                onResetFilters={() => this.handleResetFilters(true)}
+                            /> :
+                            undefined
+                    }
+                    {
+                        pages && goods && feed ?
+                            <CatalogueFeed
+                                feed={feed}
+                                goods={goods}
+                                pages={pages}
+                                page={this.state.filters.page}
+                                categoryName={categoryName}
+                                availableFilters={availableFilters}
+                                filters={filters}
+                                onSelectFilter={this.handleSelectFilter}
+                            /> :
+                            undefined
+                    }
+                </main>
+                {/*<CatalogueSlider/>*/}
+            </React.Fragment>
+        )
+    }
 }
 
 CataloguePage.contextTypes = {
-	newApi: PropTypes.object.isRequired
+    newApi: PropTypes.object.isRequired
 };
 
 export default CataloguePage;

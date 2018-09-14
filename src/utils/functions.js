@@ -129,8 +129,10 @@ export function serialize(obj) {
 	const str = [];
 	for (let p in obj) {
 		if (obj.hasOwnProperty(p)) {
-			if (obj[p] === undefined) {
+			if (obj[p] === undefined || (Array.isArray(obj[p]) && obj[p].length < 1)) {
 				continue;
+			} else if (Array.isArray(obj[p]) && obj[p].length >= 1) {
+                obj[p].forEach(el => str.push((`${p}[]`) + "=" + (el)));
 			} else {
 				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
 			}
