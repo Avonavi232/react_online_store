@@ -110,7 +110,7 @@ class CataloguePage extends React.Component {
         } else {
             return reset;
         }
-    }
+    };
 
     handleUpdatePriceFilter = (minPrice, maxPrice) => {
         this.setState({
@@ -209,6 +209,7 @@ class CataloguePage extends React.Component {
                                 availableFilters={availableFilters}
                                 filters={filters}
                                 onSelectFilter={this.handleSelectFilter}
+																handleFavoriteToggle={this.props.handleFavoriteToggle}
                             /> :
                             undefined
                     }

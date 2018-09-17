@@ -72,7 +72,6 @@ class App extends Component {
         }
 
         localStorage.setItem(this.favoriteStorageKey, JSON.stringify(favorites));
-
         this.setState({favorites});
     };
 
@@ -98,7 +97,11 @@ class App extends Component {
                         render={
                             props =>
                                 categories.length ?
-                                    <CataloguePage {...props} categories={categories}/> :
+                                    <CataloguePage
+																				{...props}
+																				categories={categories}
+																				handleFavoriteToggle={this.handleFavoriteToggle}
+																		/> :
                                     <p>Loading</p>
                         }
                     />

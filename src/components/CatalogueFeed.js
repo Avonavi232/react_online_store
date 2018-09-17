@@ -23,9 +23,18 @@ const Selector = props => {
 };
 
 class CatalogueFeed extends React.Component {
+    handleFavoriteClick(e, id){
+        e.preventDefault();
+        this.props.handleFavoriteToggle(id);
+    }
 
     render() {
         const {feed, goods, pages, page, categoryName, onSelectFilter, filters, availableFilters} = this.props;
+
+			const
+					{favoriteStorageKey} = this.context,
+					storageStr = localStorage.getItem(favoriteStorageKey),
+					storageParsed = storageStr ? JSON.parse(storageStr) : [];
 
         return (
             <section className="product-catalogue-content">
@@ -45,7 +54,6 @@ class CatalogueFeed extends React.Component {
                 </section>
 
                 <section className="product-catalogue__item-list">
-
                     {
                         feed.map(item => {
                             return (
@@ -56,7 +64,10 @@ class CatalogueFeed extends React.Component {
                                             src={item.images[0]}
                                             alt={item.title}
                                         />
-                                        <div className="product-catalogue__product_favorite">
+                                        <div
+                                            onClick={(e) => this.handleFavoriteClick(e, item.id)}
+                                            className={`product-catalogue__product_favorite${storageParsed.includes(item.id) ? ' favorite' : ''}`}
+                                        >
                                             <p></p>
                                         </div>
                                         {/*<div className="arrow arrow_left"/>*/}
@@ -87,6 +98,10 @@ class CatalogueFeed extends React.Component {
         )
     }
 }
+
+CatalogueFeed.contextTypes = {
+	favoriteStorageKey: PropTypes.string.isRequired
+};
 
 CatalogueFeed.propTypes = {
     categoryName: PropTypes.string.isRequired,

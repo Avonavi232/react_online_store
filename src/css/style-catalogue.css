@@ -153,6 +153,10 @@ select {
     background-image: url(../img/catalogue-pics/product-catalogue__product_favorite.png);
     background-repeat: no-repeat;
 }
+.product-catalogue .product-catalogue__product_favorite.favorite a,
+.product-catalogue .product-catalogue__product_favorite.favorite p {
+    background-image: url(../img/catalogue-pics/product-catalogue__product_favorite_chosen.png);
+}
 
 .product-catalogue .product-catalogue__product_favorite a:hover,
 .product-catalogue .product-catalogue__product_favorite p:hover {
@@ -169,32 +173,6 @@ select {
     z-index: 10;
 }
 
-.product-catalogue__product_favorite-chosen {
-    position: absolute;
-    display: block;
-    width: 33px;
-    height: 30px;
-    background-image: url(../img/catalogue-pics/product-catalogue__product_favorite_chosen.png);
-    background-repeat: no-repeat;
-}
-
-.product-catalogue__product_favorite-chosen:hover::before {
-    position: relative;
-    top: 1px;
-    left: -133px;
-    content: "В избранном";
-    display: block;
-    width: 133px;
-    height: 22px;
-    padding: 2px 0 0 12px;
-    border: 2px solid #FF748B;
-    border-radius: 5px;
-    font-family: Roboto;
-    font-weight: 300;
-    font-size: 18px;
-    color: #FF748B;
-    cursor: pointer;
-}
 
 /* Карточка товара в каталоге с ховером*/
 a.item-list__item-card {

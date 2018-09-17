@@ -44,17 +44,19 @@ export default class FeaturedContainer extends React.Component {
             });
     }
 
+    isProductInFavorites(productId){
+			const
+					{favoriteStorageKey} = this.context,
+					storageStr = localStorage.getItem(favoriteStorageKey),
+					storageParsed = storageStr ? JSON.parse(storageStr) : [];
+
+			return storageParsed.includes(productId);
+    }
+
     prepareSliderItems(activePos, stack) {
         let first;
 
-        const
-            {favoriteStorageKey} = this.context,
-            storageStr = localStorage.getItem(favoriteStorageKey),
-            storageParsed = storageStr ? JSON.parse(storageStr) : [],
-            activeInFavorites = storageParsed.includes(stack[activePos].id);
-
-        console.log(activeInFavorites);
-
+        const activeInFavorites = this.isProductInFavorites(stack[activePos].id);
 
         if ((activePos - 1) < 0) {
             first =
@@ -81,7 +83,7 @@ export default class FeaturedContainer extends React.Component {
                 <Link to={`/product/?id=${stack[activePos].id}`}/>
                 <div
                     onClick={() => this.props.handleFavoriteToggle(stack[activePos].id)}
-                    className="new-deals__product_favorite"
+                    className={`new-deals__product_favorite${activeInFavorites ? ' favorite' : ''}`}
                 />
             </div>;
 
@@ -160,10 +162,10 @@ export default class FeaturedContainer extends React.Component {
         if (!prevState.activeCategory || !this.state.activeCategory.id || this.state.activePos === null) {
             return;
         }
-
-
-        if ((prevState.activeCategory.id !== this.state.activeCategory.id) || (prevState.activePos !== this.state.activePos)) {
-
+        
+        if ((prevState.activeCategory.id !== this.state.activeCategory.id) ||
+            (prevState.activePos !== this.state.activePos) ||
+            (prevProps.favorites.length !== this.props.favorites.length)) {
             this.updateSlider();
         }
     }
