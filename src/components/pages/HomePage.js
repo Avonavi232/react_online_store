@@ -8,13 +8,13 @@ import AboutUs from '../AboutUs';
 
 export default class HomePage extends React.Component {
 	render() {
-		const {categories, handleFavoriteToggle} = this.props;
+		const {categories, handleFavoriteToggle, favorites} = this.props;
 		return (
 				<React.Fragment>
 					<Banner/>
 					{
 						categories.length ?
-								<Featured handleFavoriteToggle={handleFavoriteToggle} categories={categories}/> :
+								<Featured handleFavoriteToggle={handleFavoriteToggle} categories={categories} favorites={favorites}/> :
 								undefined
 					}
 					<SalesNews/>
@@ -26,5 +26,6 @@ export default class HomePage extends React.Component {
 
 HomePage.propTypes = {
 	categories: PropTypes.array.isRequired,
+    favorites: PropTypes.array.isRequired,
 	handleFavoriteToggle: PropTypes.func.isRequired
 };

@@ -47,13 +47,13 @@ export default class FeaturedContainer extends React.Component {
     prepareSliderItems(activePos, stack) {
         let first;
 
-        // const
-        // 		{favoriteStorageKey} = this.context,
-        // 		storageStr = localStorage.getItem(this.favoriteStorageKey),
-        // 		storageParsed = storageStr ? JSON.parse(storageStr) : [],
-        // 		activeInFavorites = storageParsed.find(el => el.id === stack[activePos].id) !== -1;
-        //
-        // console.log(activeInFavorites);
+        const
+            {favoriteStorageKey} = this.context,
+            storageStr = localStorage.getItem(favoriteStorageKey),
+            storageParsed = storageStr ? JSON.parse(storageStr) : [],
+            activeInFavorites = storageParsed.includes(stack[activePos].id);
+
+        console.log(activeInFavorites);
 
 
         if ((activePos - 1) < 0) {
@@ -80,8 +80,7 @@ export default class FeaturedContainer extends React.Component {
             >
                 <Link to={`/product/?id=${stack[activePos].id}`}/>
                 <div
-                    onClick={this.props.handleFavoriteToggle}
-                    data-id={stack[activePos].id}
+                    onClick={() => this.props.handleFavoriteToggle(stack[activePos].id)}
                     className="new-deals__product_favorite"
                 />
             </div>;
@@ -157,6 +156,7 @@ export default class FeaturedContainer extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+
         if (!prevState.activeCategory || !this.state.activeCategory.id || this.state.activePos === null) {
             return;
         }
@@ -193,7 +193,8 @@ export default class FeaturedContainer extends React.Component {
 FeaturedContainer.propTypes = {
     // api: PropTypes.string.isRequired
     handleFavoriteToggle: PropTypes.func.isRequired,
-    categories: PropTypes.array.isRequired
+    categories: PropTypes.array.isRequired,
+    favorites: PropTypes.array.isRequired,
 };
 
 FeaturedContainer.contextTypes = {
