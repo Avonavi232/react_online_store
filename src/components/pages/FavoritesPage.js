@@ -4,90 +4,157 @@ import {parse} from 'query-string';
 
 import Breadcrumbs from '../Breadcrumbs';
 import CatalogueSidebar from '../CatalogueSidebar';
-import ProductsFeed from '../ProductsFeed';
+import FavoritesFeed from '../FavoritesFeed';
+import Pagination from '../Pagination';
 import CatalogueSlider from '../CatalogueSlider';
-import {get, serialize} from "../../utils/functions";
+import {get, serialize, handleSelectFilter} from "../../utils/functions";
 
-import '../../css/style-catalogue.css';
+const Selector = props => {
+    return (
+        <select
+            id="sorting"
+            value={props.value}
+            onChange={event => props.onSelectFilter({sortBy: event.currentTarget.value})}
+        >
+            {
+                props.options.map(option =>
+                    <option
+                        key={option.value}
+                        value={option.value}
+                    >{option.title}</option>
+                )
+            }
+        </select>
+    )
+};
+
 
 class FavoritesPage extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+    constructor(props, context) {
+        super(props, context);
 
-		this.state = {
-			feed: [],
-			feedLength: undefined,
-			pagesCount: undefined,
-			filters: {
-				sortBy: undefined,
-				page: 1,
-				id: []
-			}
-		}
-	}
+        this.state = {
+            feed: [],
+            feedLength: undefined,
+            pagesCount: undefined,
+            sortBy: [
+                {
+                    value: 'popularity',
+                    title: 'По популярности'
+                },
+                {
+                    value: 'size',
+                    title: 'По размеру'
+                },
+                {
+                    value: 'brand',
+                    title: 'По производителю'
+                },
+                {
+                    value: 'price',
+                    title: 'По цене'
+                }
+            ],
+            filters: {
+                sortBy: undefined,
+                page: 1,
+                id: []
+            }
+        };
 
-
-	componentDidMount() {
-		const
-				{favoriteStorageKey} = this.context,
-				favoritesIdArray = localStorage.getParsed(favoriteStorageKey, []);
-
-		this.setState({
-			filters: {
-				...this.state.filters,
-				id: favoritesIdArray
-			}
-		})
-	}
-
-	componentDidUpdate(prevProps, prevState) {
-		if (serialize(this.state.filters) !== serialize(prevState.filters)) {
-			this.getFilteredProducts(serialize(this.state.filters))
-					.then(responce => {
-						this.setState({
-							feed: responce.data,
-							feedLength: responce.goods,
-							pagesCount: responce.pages
-						})
-					});
-		}
-	}
-
-	getFilteredProducts = filters => {
-		const {products} = this.context.newApi;
-
-		return new Promise(resolve => {
-			get(products(filters))
-					.then(responce => resolve(responce));
-		})
-	};
+        this.handleSelectFilter = handleSelectFilter.bind(this);
+    }
 
 
-	render() {
-		const {feed, feedLength} = this.state;
-		return (
-				<React.Fragment>
-					{
-						feed.length ?
-								<ProductsFeed
-										feedTitle="В вашем избранном"
-										feedSubtitle={`${feedLength} наименований`}
-										feedArray={feed}
-								/> :
-								<p>loading</p>
-					}
-				</React.Fragment>
-		)
-	}
+    componentDidMount() {
+        this.setState({
+            filters: {
+                ...this.state.filters,
+                id: this.props.favorites
+            }
+        })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (serialize(this.props.favorites) !== serialize(prevProps.favorites)) {
+            this.setState({
+                filters: {
+                    ...this.state.filters,
+                    id: this.props.favorites
+                }
+            })
+        }
+
+        if (serialize(this.state.filters) !== serialize(prevState.filters)) {
+            this.getFilteredProducts(serialize(this.state.filters))
+                .then(responce => {
+                    this.setState({
+                        feed: responce.data,
+                        feedLength: responce.goods,
+                        pagesCount: responce.pages
+                    })
+                });
+        }
+    }
+
+    getFilteredProducts = filters => {
+        const {products} = this.context.newApi;
+
+        return new Promise(resolve => {
+            get(products(filters))
+                .then(responce => resolve(responce));
+        })
+    };
+
+    render() {
+        const
+            {feed, feedLength, pagesCount, filters, sortBy} = this.state,
+            {handleFavoriteToggle} = this.props;
+        return (
+            <div className="wrapper wrapper_favorite">
+                <main className="product-catalogue product-catalogue_favorite">
+                    <section className="product-catalogue__head product-catalogue__head_favorite">
+                        <div className="product-catalogue__section-title">
+                            <h2 className="section-name">В вашем избранном</h2>
+                            <span className="amount">{`${feedLength} наименований`}</span>
+                        </div>
+                        <div className="product-catalogue__sort-by">
+                            <p className="sort-by">Сортировать</p>
+                            <Selector
+                                value={filters.sortBy}
+                                options={sortBy}
+                                onSelectFilter={this.handleSelectFilter}
+                            />
+                        </div>
+                    </section>
+                    {
+                        feed.length ?
+                            <FavoritesFeed
+                                feedArray={feed}
+                                handleFavoriteToggle={handleFavoriteToggle}
+                            /> :
+                            <p>loading</p>
+                    }
+                    {
+                        pagesCount > 1 ?
+                            <Pagination onSelectFilter={this.handleSelectFilter} page={filters.page}
+                                        pages={pagesCount}/> :
+                            undefined
+                    }
+                </main>
+            </div>
+        )
+    }
 }
 
 FavoritesPage.contextTypes = {
-	newApi: PropTypes.object.isRequired,
-	favoriteStorageKey: PropTypes.string.isRequired
+    newApi: PropTypes.object.isRequired,
+    favoriteStorageKey: PropTypes.string.isRequired
 };
 
 FavoritesPage.propTypes = {
-	handleFavoriteToggle: PropTypes.func.isRequired
+    handleFavoriteToggle: PropTypes.func.isRequired,
+    favorites: PropTypes.array.isRequired
 };
 
 export default FavoritesPage;

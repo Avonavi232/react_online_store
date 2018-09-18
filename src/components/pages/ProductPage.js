@@ -165,12 +165,12 @@ export default class ProductPage extends React.Component {
             newOverlookedArchive.splice(randomIndex, 1);
         }
 
-        window.localStorage.setItem(storageKey, JSON.stringify(newOverlookedArchive));
+        window.localStorage.setParsed(storageKey, newOverlookedArchive);
     };
 
     getOverlookedItems = () => {
         const storageKey = this.context.overlookedStorageKey;
-        return JSON.parse(window.localStorage.getItem(storageKey)) || [];
+        return localStorage.getParsed(storageKey, []);
     };
 
     getSimilarItems = () => {

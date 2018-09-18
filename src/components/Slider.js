@@ -18,7 +18,6 @@ class Slider extends React.Component {
         this.sliderInit(this.props.settings || {});
     }
 
-
     sliderInit(userSettings = {}) {
         const defaults = {
             slidesToShow: 3,
@@ -173,7 +172,7 @@ class Slider extends React.Component {
             // console.log('currentVisible: ', currentVisible);
             for (i = currentVisible; i < (currentVisible + this.settings.slidesToScroll);) {
 
-                if ( i < (elements.length - this.settings.slidesToShow) && elements[i]) {
+                if (i < (elements.length - this.settings.slidesToShow) && elements[i]) {
                     scrollPos -= settings.direction === 'horizontal' ? elements[i].offsetWidth : elements[i].offsetHeight;
                     scrollPos -= settings.gutter;
                     i++;
@@ -231,6 +230,7 @@ class Slider extends React.Component {
     render() {
         let arrows;
         if (this.settings && this.settings.showArrows) {
+            console.log('arrows');
             arrows = this.generateArrowsJSX();
         }
 
@@ -240,7 +240,6 @@ class Slider extends React.Component {
 
 
         return (
-
             <div
                 className={containerClassName}
             >

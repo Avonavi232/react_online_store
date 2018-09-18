@@ -22,30 +22,6 @@ a:hover {
 }
 
 
-/*Breadcrumbs*/
-.site-path {
-  width: 1120px;
-  margin: 0 auto;
-  padding-bottom: 14px;
-}
-
-.site-path__items {
-  display: flex;
-  padding-top: 20px;
-}
-.site-path__item {
-  list-style: none;
-}
-.site-path__item a {
-  font-size: 14px;
-  text-align: center;
-  text-decoration: none;
-  color: #333333;
-}
-.site-path__item:not(:first-child)::before {
-  content: "\2000 \203a \2000";
-}
-
 /*Карточка товара*/
 .product-card {
   width: 1440px;

@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import './css/normalize.css';
 import './css/font-awesome.min.css';
 import './css/style.css';
+import './css/style-catalogue.css';
+import './css/style-favorite.css';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -17,118 +19,119 @@ import {get, localStorageGetParsedPlugin, localStorageSetParsedPlugin} from "./u
 
 
 class App extends Component {
-	constructor(props) {
-		super(props);
+    constructor(props) {
+        super(props);
 
-		localStorageGetParsedPlugin();
-		localStorageSetParsedPlugin();
+        localStorageGetParsedPlugin();
+        localStorageSetParsedPlugin();
 
-		this.api = 'https://api-neto.herokuapp.com/bosa-noga';
-		this.baseurl = 'https://api-neto.herokuapp.com/bosa-noga';
+        this.api = 'https://api-neto.herokuapp.com/bosa-noga';
+        this.baseurl = 'https://api-neto.herokuapp.com/bosa-noga';
 
-		this.newApi = {
-			filters: () => `${this.baseurl}/filters`,
-			products: queryStr => `${this.baseurl}/products${queryStr ? `/?${queryStr}` : ''}`
-		};
+        this.newApi = {
+            filters: () => `${this.baseurl}/filters`,
+            products: queryStr => `${this.baseurl}/products${queryStr ? `/?${queryStr}` : ''}`
+        };
 
-		this.overlookedStorageKey = 'bosanogaOverlooked';
-		this.favoriteStorageKey = 'bosanogaFavorite';
+        this.overlookedStorageKey = 'bosanogaOverlooked';
+        this.favoriteStorageKey = 'bosanogaFavorite';
 
-		this.state = {
-			fetching: false,
-			categories: [],
-			favorites: []
-		};
-	}
+        this.state = {
+            fetching: false,
+            categories: [],
+            favorites: []
+        };
+    }
 
-	componentDidMount() {
-		//Fetch categories
-		this.setState({fetching: true}, () => {
-			get(`${this.api}/categories`)
-					.then(({data}) => {
-						this.setState({
-							fetching: false,
-							categories: data
-						})
-					})
-		});
-	}
+    componentDidMount() {
+        //Fetch categories
+        this.setState({fetching: true}, () => {
+            get(`${this.api}/categories`)
+                .then(({data}) => {
+                    this.setState({
+                        fetching: false,
+                        categories: data,
+                        favorites: localStorage.getParsed(this.favoriteStorageKey, [])
+                    })
+                })
+        });
+    }
 
-	getChildContext() {
-		return {
-			api: this.api,
-			newApi: this.newApi,
-			overlookedStorageKey: this.overlookedStorageKey,
-			favoriteStorageKey: this.favoriteStorageKey
-		}
-	}
+    getChildContext() {
+        return {
+            api: this.api,
+            newApi: this.newApi,
+            overlookedStorageKey: this.overlookedStorageKey,
+            favoriteStorageKey: this.favoriteStorageKey
+        }
+    }
 
-	handleFavoriteToggle = favoriteID => {
-		const
-				storageStr = localStorage.getItem(this.favoriteStorageKey),
-				storageParsed = storageStr ? JSON.parse(storageStr) : [];
-		let favorites;
+    handleFavoriteToggle = favoriteID => {
+        const favoritesLS = localStorage.getParsed(this.favoriteStorageKey, []);
 
-		if (storageParsed.includes(favoriteID)) {
-			favorites = storageParsed.filter(id => id !== favoriteID);
-		} else {
-			favorites = storageParsed.concat([favoriteID]);
-		}
+        let favorites;
 
-		localStorage.setItem(this.favoriteStorageKey, JSON.stringify(favorites));
-		this.setState({favorites});
-	};
+        if (favoritesLS.includes(favoriteID)) {
+            favorites = favoritesLS.filter(id => id !== favoriteID);
+        } else {
+            favorites = favoritesLS.concat([favoriteID]);
+        }
 
-	render() {
-		const {fetching, categories, favorites} = this.state;
-		return (
-				<div className="app container">
-					<Header fetching={fetching} categories={categories}/>
+        localStorage.setParsed(this.favoriteStorageKey, favorites);
+        this.setState({favorites});
+    };
 
-					<Switch>
-						<Route exact path="/" render={props =>
-								<HomePage
-										fetching={fetching}
-										categories={categories}
-										favorites={favorites}
-										handleFavoriteToggle={this.handleFavoriteToggle}
-										{...props}
-								/>
-						}
-						/>
-						<Route
-								path="/products"
-								render={
-									props =>
-											categories.length ?
-													<CataloguePage
-															{...props}
-															categories={categories}
-															handleFavoriteToggle={this.handleFavoriteToggle}
-													/> :
-													<p>Loading</p>
-								}
-						/>
-						<Route path="/product" component={ProductPage}/>
-						<Route path="/favorites" render={props =>
-								<FavoritesPage
-										{...props}
-										handleFavoriteToggle={this.handleFavoriteToggle}
-								/>}
-						/>
-					</Switch>
+    render() {
+        const {fetching, categories, favorites} = this.state;
+        return (
+            <div className="app container">
+                <Header fetching={fetching} categories={categories}/>
 
-					<Footer/>
-				</div>
-		);
-	}
+                <Switch>
+                    <Route exact path="/" render={props =>
+                        <HomePage
+                            fetching={fetching}
+                            categories={categories}
+                            favorites={favorites}
+                            handleFavoriteToggle={this.handleFavoriteToggle}
+                            {...props}
+                        />
+                    }
+                    />
+                    <Route
+                        path="/products"
+                        render={
+                            props =>
+                                categories.length ?
+                                    <CataloguePage
+                                        {...props}
+                                        categories={categories}
+                                        handleFavoriteToggle={this.handleFavoriteToggle}
+                                    /> :
+                                    <p>Loading</p>
+                        }
+                    />
+                    <Route path="/product" component={ProductPage}/>
+                    <Route path="/favorites" render={props =>
+                        <FavoritesPage
+                            {...props}
+                            handleFavoriteToggle={this.handleFavoriteToggle}
+                            favorites={favorites}
+                        />}
+                    />
+                </Switch>
+
+                <Footer/>
+            </div>
+        );
+    }
 }
 
 App.childContextTypes = {
-	api: PropTypes.string.isRequired,
-	newApi: PropTypes.object.isRequired,
-	overlookedStorageKey: PropTypes.string.isRequired,
-	favoriteStorageKey: PropTypes.string.isRequired,
+    api: PropTypes.string.isRequired,
+    newApi: PropTypes.object.isRequired,
+    overlookedStorageKey: PropTypes.string.isRequired,
+    favoriteStorageKey: PropTypes.string.isRequired,
 };
 
 export default App;

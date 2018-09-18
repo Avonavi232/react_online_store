@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&subset=cyrillic-ext');
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed&subset=cyrillic-ext');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   min-width: 1205px;
   margin: 0 auto;
@@ -1054,3 +1056,50 @@ li a:hover {
   color: #ffffff;
   cursor: pointer;
 }
+
+
+/*Breadcrumbs*/
+.site-path {
+  width: 1120px;
+  margin: 0 auto;
+  padding-bottom: 14px;
+}
+
+.site-path__items {
+  display: flex;
+  padding-top: 20px;
+}
+.site-path__item {
+  list-style: none;
+}
+.site-path__item a {
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  color: #333333;
+}
+.site-path__item:not(:first-child)::before {
+  content: "\2000 \203a \2000";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

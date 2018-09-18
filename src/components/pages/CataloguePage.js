@@ -6,9 +6,8 @@ import Breadcrumbs from '../Breadcrumbs';
 import CatalogueSidebar from '../CatalogueSidebar';
 import CatalogueFeed from '../CatalogueFeed';
 import CatalogueSlider from '../CatalogueSlider';
-import {get, serialize, transliterate} from "../../utils/functions";
+import {get, serialize, transliterate, handleSelectFilter} from "../../utils/functions";
 
-import '../../css/style-catalogue.css';
 
 class CataloguePage extends React.Component {
     constructor(props, context) {
@@ -21,14 +20,15 @@ class CataloguePage extends React.Component {
             feed: undefined,
             pages: undefined,
             goods: undefined,
-            feedUpdated: true,
             filters: {
                 page: 1,
                 categoryId,
                 ...this.handleResetFilters()
             },
             availableFilters: undefined
-        }
+        };
+
+        this.handleSelectFilter = handleSelectFilter.bind(this);
     }
 
     componentDidMount() {
@@ -52,7 +52,7 @@ class CataloguePage extends React.Component {
             });
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         const
             filters = serialize(this.state.filters),
             categoryId = parse(this.props.location.search).category,
@@ -61,7 +61,6 @@ class CataloguePage extends React.Component {
 
         if (categoryId !== prevCategoryId) {
             this.setState({
-                feedUpdated: false,
                 categoryName,
                 filters: {
                     page: 1,
@@ -71,11 +70,10 @@ class CataloguePage extends React.Component {
             })
         }
 
-        if (!this.state.feedUpdated) {
+        if (serialize(prevState.filters) !== filters) {
             this.getFilteredProducts(filters)
                 .then(responce => {
                     this.setState({
-                        feedUpdated: true,
                         pages: responce.pages,
                         goods: responce.goods,
                         feed: responce.data
@@ -101,7 +99,6 @@ class CataloguePage extends React.Component {
 
         if (setState) {
             this.setState({
-                feedUpdated: false,
                 filters: {
                     ...this.state.filters,
                     ...reset
@@ -114,7 +111,6 @@ class CataloguePage extends React.Component {
 
     handleUpdatePriceFilter = (minPrice, maxPrice) => {
         this.setState({
-            feedUpdated: false,
             filters: {
                 ...this.state.filters,
                 maxPrice,
@@ -125,20 +121,9 @@ class CataloguePage extends React.Component {
 
     handleSelectPage = (page) => {
         this.setState({
-            feedUpdated: false,
             filters: {
                 ...this.state.filters,
                 page
-            }
-        });
-    };
-
-    handleSelectFilter = filterObject => {
-        this.setState({
-            feedUpdated: false,
-            filters: {
-                ...this.state.filters,
-                ...filterObject
             }
         });
     };
