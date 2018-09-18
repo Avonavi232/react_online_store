@@ -160,3 +160,27 @@ export function transliterate(word){
 	}).join("");
 }
 
+export function localStorageGetParsedPlugin() {
+	Object.getPrototypeOf(localStorage).getParsed = function (key, defaultStructure) {
+		const str = this.getItem(key);
+		defaultStructure = defaultStructure || "";
+		try {
+			return str ? JSON.parse(str) : defaultStructure
+		} catch (e) {
+			console.error(e);
+		}
+	};
+}
+
+export function localStorageSetParsedPlugin() {
+	Object.getPrototypeOf(localStorage).setParsed = function (key, value) {
+		try {
+			this.setItem(key, JSON.stringify(value));
+			return true
+		} catch (e) {
+			console.error(e);
+			return false;
+		}
+	};
+}
+
