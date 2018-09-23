@@ -7,6 +7,7 @@ import './css/font-awesome.min.css';
 import './css/style.css';
 import './css/style-catalogue.css';
 import './css/style-favorite.css';
+import './css/style-order.css';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -14,6 +15,7 @@ import HomePage from './components/pages/HomePage';
 import CataloguePage from './components/pages/CataloguePage';
 import FavoritesPage from './components/pages/FavoritesPage';
 import ProductPage from './components/pages/ProductPage';
+import OrderPage from './components/pages/OrderPage';
 
 import {get, localStorageGetParsedPlugin, localStorageSetParsedPlugin} from "./utils/functions";
 
@@ -179,7 +181,7 @@ class App extends Component {
 				{cartId} = this.state;
 
 		if (cartId) {
-			this._updateCart(product)
+			return this._updateCart(product)
 					.then(() => fetch(getCart(cartId)))
 					.then(responce => {
 						if(responce.status === 404) {
@@ -193,7 +195,7 @@ class App extends Component {
 						}
 					});
 		} else {
-			this._createNewCart(product);
+			return this._createNewCart(product);
 		}
 	};
 
@@ -245,6 +247,14 @@ class App extends Component {
 										handleFavoriteToggle={this.handleFavoriteToggle}
 										favorites={favorites}
 								/>}
+						/>
+
+						<Route path="/order" render={props =>
+							<OrderPage
+									{...props}
+									cart={cart}
+									handleUpdateCart={this.handleUpdateCart}
+							/>}
 						/>
 					</Switch>
 

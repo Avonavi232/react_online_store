@@ -310,7 +310,9 @@ export default class ProductPage extends React.Component {
                                                   images: product.images,
                                                   size: activeSize.size,
                                                   amount: activeAmount,
-                                                  price: product.price
+                                                  price: product.price,
+                                                  color: product.color,
+                                                  brand: product.brand,
                                                 })}
                                                 className="in-basket in-basket-click"
                                             >В корзину</button>
