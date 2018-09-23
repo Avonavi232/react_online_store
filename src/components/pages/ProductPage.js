@@ -227,7 +227,8 @@ export default class ProductPage extends React.Component {
     render() {
         const
             {product, activeSize, activeAmount, similarItems} = this.state,
-            overlookedItems = this.getOverlookedItems();
+            overlookedItems = this.getOverlookedItems(),
+            {handleUpdateCart} = this.props;
 
         return (
             <React.Fragment>
@@ -302,7 +303,17 @@ export default class ProductPage extends React.Component {
                                                 setAmount={this.setAmount}
                                             />
                                             <div className="price">{product.price * activeAmount} ₽</div>
-                                            <button className="in-basket in-basket-click">В корзину</button>
+                                            <button
+                                                onClick={() => handleUpdateCart({
+                                                  id: product.id,
+                                                  title: product.title,
+                                                  images: product.images,
+                                                  size: activeSize.size,
+                                                  amount: activeAmount,
+                                                  price: product.price
+                                                })}
+                                                className="in-basket in-basket-click"
+                                            >В корзину</button>
                                         </div>
 
                                     </section>
@@ -373,6 +384,10 @@ export default class ProductPage extends React.Component {
         )
     }
 }
+
+ProductPage.propTypes = {
+	handleUpdateCart: PropTypes.func.isRequired
+};
 
 ProductPage.contextTypes = {
     api: PropTypes.string.isRequired,

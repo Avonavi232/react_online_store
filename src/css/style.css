@@ -1031,6 +1031,11 @@ li a:hover {
   height: 39px;
   background-color: #ffffff;
 }
+
+.product-list__pic img {
+  max-width: 100%;
+}
+
 .product-list__product {
   margin: 0 20px;
   font-weight: 300;

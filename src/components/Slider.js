@@ -230,7 +230,6 @@ class Slider extends React.Component {
     render() {
         let arrows;
         if (this.settings && this.settings.showArrows) {
-            console.log('arrows');
             arrows = this.generateArrowsJSX();
         }
 

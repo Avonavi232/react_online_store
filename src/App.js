@@ -46,7 +46,7 @@ class App extends Component {
 			categories: [],
 			favorites: [],
 			cartId: undefined,
-			cart: undefined
+			cart: []
 		};
 	}
 
@@ -62,14 +62,8 @@ class App extends Component {
 						})
 					})
 		});
-		this.handleCreateCart({
-			"id": 42,
-			"size": 14,
-			"amount": 12,
-			"azaza": 1
-		})
-				.then(() => this.handleFetchCart(this.state.cartId))
-				.then(responce => console.log(responce));
+
+		this._initCart();
 	}
 
 	getChildContext() {
@@ -96,7 +90,7 @@ class App extends Component {
 		this.setState({favorites});
 	};
 
-	createNewCart = body => {
+	_createNewCart = body => {
 		const {createCart} = this.newApi;
 
 		return fetch(createCart(), {
@@ -110,8 +104,8 @@ class App extends Component {
 				.then(responce => responce.json())
 				.then(responce => {
 					if (responce.status = 'ok') {
-						localStorage.setParsed(this.cartStorageKey, responce.data.id);
 						return new Promise(resolve => {
+							localStorage.setParsed(this.cartStorageKey, responce.data.id);
 							this.setState({
 								cartId: responce.data.id,
 								cart: [body],
@@ -123,48 +117,96 @@ class App extends Component {
 				})
 	};
 
-	handleCreateCart = (product) => {
+	_initCart = () => {
 		const
 				{getCart} = this.newApi,
 				storageCartId = localStorage.getParsed(this.cartStorageKey, '');
 
 		//Если в ЛС сохранен ID корзины, то проверить его актуальность, отправив запрос
-		if (storageCartId) {
-			return fetch(getCart(storageCartId))
+		return new Promise(resolve => {
+			if (storageCartId) {
+				return fetch(getCart(storageCartId))
+						.then(responce => {
+							if (responce.status === 200) {
+								//Если ID корзины актуален
+								return responce.json()
+										.then(json => {
+											return new Promise(resolve => {
+												this.setState({
+													cartId: json.data.id,
+													cart: json.data.products
+												}, () => resolve());
+											})
+										});
+							} else {
+								resolve();
+							}
+						})
+			} else {
+				resolve();
+			}
+		})
+	};
+
+	_updateCart = body => {
+		const
+				{updateCart} = this.newApi,
+				{cartId} = this.state;
+
+		return new Promise((resolve, reject) => {
+			return fetch(updateCart(cartId), {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(body)
+			})
+					.then(responce => responce.json())
 					.then(responce => {
-						if (responce.status !== 200) {
-							//Если ID корзины не актуален, то создать новую
-							return this.createNewCart(product);
+						if (responce.status = 'ok') {
+							resolve();
 						} else {
-							//Если ID корзины актуален
-							return responce.json()
-									.then(json => {
-										return new Promise(resolve => {
-											this.setState({
-												cartId: json.data.id,
-												cart: json.data.products
-											}, () => resolve())
-										})
-									});
+							reject(new Error('Update cart error'));
 						}
 					})
+		})
+	};
+
+	handleUpdateCart = product => {
+		const
+				{getCart} = this.newApi,
+				{cartId} = this.state;
+
+		if (cartId) {
+			this._updateCart(product)
+					.then(() => fetch(getCart(cartId)))
+					.then(responce => {
+						if(responce.status === 404) {
+							this.setState({
+								cart: [],
+								cartId: undefined
+							})
+						} else {
+							responce.json()
+									.then(({data}) => this.setState({cart: data.products}));
+						}
+					});
 		} else {
-			return this.createNewCart(product);
+			this._createNewCart(product);
 		}
 	};
 
-	handleFetchCart = cartId => {
-		const {getCart} = this.newApi;
-
-		return get(getCart(cartId))
-				.then(responce => responce.data.products);
-	};
-
 	render() {
-		const {fetching, categories, favorites} = this.state;
+		const {fetching, categories, favorites, cart} = this.state;
 		return (
 				<div className="app container">
-					<Header fetching={fetching} categories={categories}/>
+					<Header
+							fetching={fetching}
+							categories={categories}
+							handleUpdateCart={this.handleUpdateCart}
+							cart={cart}
+					/>
 
 					<Switch>
 						<Route exact path="/" render={props =>
@@ -175,8 +217,8 @@ class App extends Component {
 										handleFavoriteToggle={this.handleFavoriteToggle}
 										{...props}
 								/>
-						}
-						/>
+						}/>
+
 						<Route
 								path="/products"
 								render={
@@ -188,9 +230,15 @@ class App extends Component {
 															handleFavoriteToggle={this.handleFavoriteToggle}
 													/> :
 													<p>Loading</p>
-								}
-						/>
-						<Route path="/product" component={ProductPage}/>
+								}/>
+
+						<Route path="/product" render={props =>
+								<ProductPage
+										{...props}
+										handleUpdateCart={this.handleUpdateCart}
+								/>
+						}/>
+
 						<Route path="/favorites" render={props =>
 								<FavoritesPage
 										{...props}

@@ -49,7 +49,7 @@ const topMenuItems = [
 
 export default class Header extends React.Component {
 	render() {
-		const {fetching, categories} = this.props;
+		const {fetching, categories, handleUpdateCart, cart} = this.props;
 		return (
 				<header className="header">
 					<div className="top-menu">
@@ -121,7 +121,7 @@ export default class Header extends React.Component {
 								</Link>
 								<a href="/">Выйти</a>
 							</div>
-							<Cart/>
+							<Cart cart={cart} handleUpdateCart={handleUpdateCart}/>
 						</div>
 					</div>
 
@@ -149,6 +149,13 @@ export default class Header extends React.Component {
 		);
 	}
 }
+
+Header.propTypes = {
+	fetching: PropTypes.bool,
+	categories: PropTypes.array.isRequired,
+	cart: PropTypes.array.isRequired,
+	handleUpdateCart: PropTypes.func.isRequired
+};
 
 Header.contextTypes = {
 	api: PropTypes.string.isRequired
