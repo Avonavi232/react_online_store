@@ -8,15 +8,19 @@ import {
 	headerHiddenPanelProfileVisibility,
 	headerMainSearchVisibility
 } from "../utils/functions";
+import Cart from'./Cart';
 
 
-const LinkItem = props =>
-		<li
-				onClick={props.onClick || (() => null)}
-				className={props.liClassName}
-		>
-			<Link to={props.to}>{props.title}</Link>
-		</li>;
+const LinkItem = props => {
+	return(
+			<li
+					onClick={props.onClick || (() => null)}
+					className={props.liClassName}
+			>
+				<Link to={props.to}>{props.title}</Link>
+			</li>
+	)
+};
 
 
 const topMenuItems = [
@@ -44,12 +48,8 @@ const topMenuItems = [
 
 
 export default class Header extends React.Component {
-	// constructor(props) {
-	// 	super(props);
-	// }
-
 	render() {
-		const {fetching, categories} = this.props;
+		const {fetching, categories, handleUpdateCart, cart} = this.props;
 		return (
 				<header className="header">
 					<div className="top-menu">
@@ -121,62 +121,7 @@ export default class Header extends React.Component {
 								</Link>
 								<a href="/">Выйти</a>
 							</div>
-							<div className="hidden-panel__basket basket-dropped">
-								<div className="basket-dropped__title">В вашей корзине:</div>
-								<div className="basket-dropped__product-list product-list">
-									<div className="product-list__item">
-										<a className="product-list__pic">
-											<img src="img/product-list__pic_1.jpg" alt="product"/> </a>
-										<a href="/" className="product-list__product">Ботинки женские, Baldinini</a>
-										<div className="product-list__fill"/>
-										<div className="product-list__price">12 360
-											<i className="fa fa-rub" aria-hidden="true"/>
-										</div>
-										<div className="product-list__delete">
-											<i className="fa fa-times" aria-hidden="true"/>
-										</div>
-									</div>
-
-									<div className="product-list__item">
-										<a className="product-list__pic">
-											<img src="img/product-list__pic_1.jpg" alt="product"/> </a>
-										<a href="/" className="product-list__product">Ботинки женские, Baldinini</a>
-										<div className="product-list__fill"/>
-										<div className="product-list__price">12 360
-											<i className="fa fa-rub" aria-hidden="true"/>
-										</div>
-										<div className="product-list__delete">
-											<i className="fa fa-times" aria-hidden="true"/>
-										</div>
-									</div>
-									<div className="product-list__item">
-										<a className="product-list__pic">
-											<img src="img/product-list__pic_1.jpg" alt="product"/> </a>
-										<a href="/" className="product-list__product">Ботинки женские, Baldinini</a>
-										<div className="product-list__fill"/>
-										<div className="product-list__price">12 360
-											<i className="fa fa-rub" aria-hidden="true"/>
-										</div>
-										<div className="product-list__delete">
-											<i className="fa fa-times" aria-hidden="true"/>
-										</div>
-									</div>
-									<div className="product-list__item">
-										<a className="product-list__pic">
-											<img src="img/product-list__pic_1.jpg" alt="product"/> </a>
-										<a href="/" className="product-list__product">Ботинки женские, Baldinini</a>
-										<div className="product-list__fill"/>
-										<div className="product-list__price">12 360
-											<i className="fa fa-rub" aria-hidden="true"/>
-										</div>
-										<div className="product-list__delete">
-											<i className="fa fa-times" aria-hidden="true"/>
-										</div>
-									</div>
-
-								</div>
-								<a className="basket-dropped__order-button" href="order.html">Оформить заказ</a>
-							</div>
+							<Cart cart={cart} handleUpdateCart={handleUpdateCart}/>
 						</div>
 					</div>
 
@@ -204,6 +149,13 @@ export default class Header extends React.Component {
 		);
 	}
 }
+
+Header.propTypes = {
+	fetching: PropTypes.bool,
+	categories: PropTypes.array.isRequired,
+	cart: PropTypes.array.isRequired,
+	handleUpdateCart: PropTypes.func.isRequired
+};
 
 Header.contextTypes = {
 	api: PropTypes.string.isRequired
