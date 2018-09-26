@@ -66,7 +66,7 @@ const Cart = props => {
 
 				{
 					props.cart.length ?
-							<span className="basket-dropped__order-button">Оформить заказ</span> :
+							<NavLink to="./order"><span className="basket-dropped__order-button">Оформить заказ</span></NavLink> :
 							undefined
 				}
 			</div>

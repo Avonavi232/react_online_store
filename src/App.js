@@ -37,6 +37,8 @@ class App extends Component {
 			createCart: () => `${this.baseurl}/cart`,
 			getCart: id => `${this.baseurl}/cart/${id}`,
 			updateCart: id => `${this.baseurl}/cart/${id}`,
+
+			order: () => `${this.baseurl}/order`
 		};
 
 		this.overlookedStorageKey = 'bosanogaOverlooked';
@@ -133,12 +135,10 @@ class App extends Component {
 								//Если ID корзины актуален
 								return responce.json()
 										.then(json => {
-											return new Promise(resolve => {
-												this.setState({
-													cartId: json.data.id,
-													cart: json.data.products
-												}, () => resolve());
-											})
+											this.setState({
+												cartId: json.data.id,
+												cart: json.data.products
+											}, () => resolve());
 										});
 							} else {
 								resolve();
@@ -200,7 +200,7 @@ class App extends Component {
 	};
 
 	render() {
-		const {fetching, categories, favorites, cart} = this.state;
+		const {fetching, categories, favorites, cart, cartId} = this.state;
 		return (
 				<div className="app container">
 					<Header
@@ -253,6 +253,7 @@ class App extends Component {
 							<OrderPage
 									{...props}
 									cart={cart}
+									cartId={cartId}
 									handleUpdateCart={this.handleUpdateCart}
 							/>}
 						/>

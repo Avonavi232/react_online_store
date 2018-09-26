@@ -2,6 +2,7 @@
   "name": "ra-bosa-noga",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://netology-code.github.io/ra-1-Avonavi232",
   "dependencies": {
     "prop-types": "^15.6.2",
     "query-string": "^6.1.0",
