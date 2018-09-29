@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import {parse} from 'query-string';
 
 import Breadcrumbs from '../Breadcrumbs';
 import CatalogueSidebar from '../CatalogueSidebar';
 import CatalogueFeed from '../CatalogueFeed';
 import CatalogueSlider from '../CatalogueSlider';
-import {get, serialize, transliterate, handleSelectFilter} from "../../utils/functions";
+import {get, serialize, transliterate, handleSelectFilter, parseQuery} from "../../utils/functions";
 
 
 class CataloguePage extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        const categoryId = parse(this.props.location.search).category;
+        const categoryId = parseQuery(this.props.location.search).category;
 
         this.state = {
             categoryName: this.props.categories.find(el => el.id === Number(categoryId)).title,
@@ -55,8 +54,8 @@ class CataloguePage extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         const
             filters = serialize(this.state.filters),
-            categoryId = parse(this.props.location.search).category,
-            prevCategoryId = parse(prevProps.location.search).category,
+            categoryId = parseQuery(this.props.location.search).category,
+            prevCategoryId = parseQuery(prevProps.location.search).category,
             categoryName = this.props.categories.find(el => el.id === Number(categoryId)).title;
 
         if (categoryId !== prevCategoryId) {

@@ -263,3 +263,29 @@ export function handleSelectFilter(filterObject) {
     });
 }
 
+export function isFunction(functionToCheck) {
+	return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+}
+
+export function parseQuery(input) {
+	if (!input || typeof input !== 'string') {
+		throw new Error('input string is not passed or not a string');
+	}
+
+	if (!isFunction(decodeURIComponent)) {
+		throw new Error('There is not browser support of decodeURIComponent');
+  }
+
+	const ret = Object.create(null);
+
+	input = input.trim().replace(/^[?#&]/, '');
+
+	for (const param of input.split('&')) {
+		let [key, value] = param.replace(/\+/g, ' ').split('=');
+		value = value === undefined ? null : decodeURIComponent(value);
+		key = decodeURIComponent(key);
+		ret[key] = value;
+	}
+	return ret;
+}
+

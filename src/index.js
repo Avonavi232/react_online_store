@@ -15,7 +15,7 @@ ReactDOM.render(
 if (module.hot) {
 	module.hot.accept('./App', () => {
 		ReactDOM.render(
-				<Router>
+				<Router basename={process.env.PUBLIC_URL}>
 					<App/>
 				</Router>,
 				document.getElementById('root')

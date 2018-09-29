@@ -4,8 +4,8 @@
   "private": true,
   "homepage": "https://netology-code.github.io/ra-1-Avonavi232",
   "dependencies": {
+    "gh-pages": "^2.0.0",
     "prop-types": "^15.6.2",
-    "query-string": "^6.1.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-router-dom": "^4.3.1",
@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "deploy": "gh-pages -d build"
   }
 }

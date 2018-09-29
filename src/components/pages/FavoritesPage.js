@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import {parse} from 'query-string';
 
-import Breadcrumbs from '../Breadcrumbs';
-import CatalogueSidebar from '../CatalogueSidebar';
 import FavoritesFeed from '../FavoritesFeed';
 import Pagination from '../Pagination';
-import CatalogueSlider from '../CatalogueSlider';
 import {get, serialize, handleSelectFilter} from "../../utils/functions";
 
 const Selector = props => {
